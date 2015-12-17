@@ -147,6 +147,8 @@ function _M:handleMouseButtonUp(event)
 		local root = self:getRoot()
 
 		if root.clickedElement == self then
+			self:setFocus()
+
 			return self:triggerEvent("click", event.button)
 		end
 	end
@@ -235,14 +237,16 @@ function _M:setFocus()
 		root.focusedElements[i] = nil
 	end
 
+	local fe = root.focusedElements
+
 	local e = self
 	while e.parent do
 		e.focused = true
 
-		root.focusedElements[#root.focusedElements+1] = e
+		fe[#fe+1] = e
 
-		root.focusedElements[i]:triggerEvent("focusChange", true)
-		root.focusedElements[i]:triggerEvent("focusReceived")
+		e:triggerEvent("focusChange", true)
+		e:triggerEvent("focusReceived")
 
 		e = e.parent
 	end

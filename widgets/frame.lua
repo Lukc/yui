@@ -10,6 +10,8 @@ function _M:draw(renderer)
 		renderer:setDrawColor(0xFF0088)
 	elseif self.hovered then
 		renderer:setDrawColor(0xFF00FF)
+	elseif self.focused then
+		renderer:setDrawColor(0x0088FF)
 	else
 		renderer:setDrawColor(0x880088)
 	end
