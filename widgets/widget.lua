@@ -25,6 +25,14 @@ _M.realX = 0
 _M.realY = 0
 
 ---
+-- Indicates whether or not a point is located within a widget.
+function _M:within(p)
+	return
+		p.x >= self.realX and p.x < self.realX + self.realWidth and
+		p.y >= self.realY and p.y < self.realY + self.realHeight
+end
+
+---
 -- Adds a child to an element.
 function _M:addChild(child)
 	self.children[#self.children+1] = child
@@ -134,30 +142,54 @@ end
 
 function _M:triggerEvent(event, ...)
 	if self.eventListeners[event] then
-		return self.eventListeners[event]
+		return self.eventListeners[event](self, ...)
 	end
 end
 
+function _M:setHover(x, y)
+	if not self.hovered then
+		local root = self:getRoot()
+
+		root.hoveredElements[#root.hoveredElements+1] = self
+
+		self.hovered = true
+
+		self:triggerEvent("hoverChange", true)
+		self:triggerEvent("hoverReceived")
+	end
+
+	for i = 1, #self.children do
+		local child = self.children[i]
+
+		if child:within {x = x, y = y} then
+			child:setHover(x, y)
+		end
+	end
+end
+
+---
+-- @todo Triggers too many events (focusLost and focusReceived can both be
+--       triggered during a single update).
 function _M:setFocus()
 	local root = self:getRoot()
 
-	for i = 1, #root.focused do
-		root.focused[i].focused = false
+	for i = 1, #root.focusedElements do
+		root.focusedElements[i].focused = false
 
-		root.focused[i]:triggerEvent("focusChange")
-		root.focused[i]:triggerEvent("focusLost")
+		root.focusedElements[i]:triggerEvent("focusChange", false)
+		root.focusedElements[i]:triggerEvent("focusLost")
 
-		root.focused[i] = nil
+		root.focusedElements[i] = nil
 	end
 
 	local e = self
 	while e.parent do
 		e.focused = true
 
-		root.focused[#root.focused+1] = e
+		root.focusedElements[#root.focusedElements+1] = e
 
-		root.focused[i]:triggerEvent("focusChange")
-		root.focused[i]:triggerEvent("focusReceived")
+		root.focusedElements[i]:triggerEvent("focusChange", true)
+		root.focusedElements[i]:triggerEvent("focusReceived")
 
 		e = e.parent
 	end
@@ -190,6 +222,9 @@ function _M:new(arg)
 	self.realWidth = self.width
 
 	self.id = arg.id
+
+	self.focused = false
+	self.hovered = false
 end
 
 return Object(_M)

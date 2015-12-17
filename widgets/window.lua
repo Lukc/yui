@@ -9,8 +9,44 @@ local _M = {}
 
 _M.backgroundColor = 0x000000
 
-function _M:addChild(child)
-	Widget.addChild(self, child)
+function _M:resetHover(x, y)
+	local element
+	local i = 1
+
+	while i <= #self.hoveredElements do
+		element = self.hoveredElements[i]
+
+		if not element:within {x = x, y = y} then
+			break
+		end
+
+		i = i + 1
+	end
+
+	while i <= #self.hoveredElements do
+		local element = self.hoveredElements[i]
+
+		element.hovered = false
+
+		element:triggerEvent("hoverChange", false)
+		element:triggerEvent("hoverLost")
+
+		self.hoveredElements[i] = nil
+
+		i = i + 1
+	end
+
+	self:setHover(x, y)
+end
+
+function _M:handleEvent(event)
+	if event.type == sdl.event.MouseMotion then
+		local _, x, y = sdl.getMouseState()
+
+		self:resetHover(x, y)
+
+		return true
+	end
 end
 
 function _M:update()
@@ -39,7 +75,8 @@ function _M:new(arg)
 	Widget.new(self, arg)
 
 	self.root = self
-	self.focused = {}
+	self.focusedElements = {}
+	self.hoveredElements = {}
 
 	self.fonts = {}
 

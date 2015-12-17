@@ -5,10 +5,12 @@ local Object = require "object"
 
 local Widget    = require "widgets.widget"
 local Window    = require "widgets.window"
+local Button    = require "widgets.button"
 
 local _M = {
 	Widget    = Widget,
 	Window    = Window,
+	Button    = Button,
 }
 
 local lastTime
@@ -23,7 +25,7 @@ function _M:run(elements)
 			local element = elements[i]
 
 			--print("Unhandled event:", e, e.type)
-			if true then
+			if element:handleEvent(e) then
 				i = #elements + 1
 			else
 				i = i + 1
