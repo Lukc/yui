@@ -3,7 +3,7 @@ local sdl = require "SDL"
 local ttf = require "SDL.ttf"
 
 local Object = require "object"
-local Widget = require "widget"
+local Widget = require "widgets.widget"
 
 local _M = {}
 

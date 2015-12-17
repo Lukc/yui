@@ -3,8 +3,8 @@ local sdl = require "SDL"
 
 local Object = require "object"
 
-local Widget    = require "widget"
-local Window    = require "window"
+local Widget    = require "widgets.widget"
+local Window    = require "widgets.window"
 
 local _M = {
 	Widget    = Widget,
