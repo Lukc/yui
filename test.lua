@@ -11,7 +11,7 @@ local w = yui.Window {
 
 	title = "Yui Test Window",
 
-	yui.Button {
+	yui.Frame {
 		width = 180,
 		height = 180,
 
@@ -20,11 +20,42 @@ local w = yui.Window {
 		x = 100,
 		y = 100,
 
+		events = {
+			-- Implementing some simple Drag’n’Drop.
+			update = function(self)
+				if self.dndData then
+					local state, x, y = sdl.getMouseState()
+
+					self.x = x - self.dndData.x
+					self.y = y - self.dndData.y
+				end
+			end,
+			mouseDown = function(self, button)
+				local state, x, y = sdl.getMouseState()
+
+				self.dndData = {
+					x = x - self.realX,
+					y = y - self.realY
+				}
+			end,
+			mouseUp = function(self, button)
+				self.dndData = nil
+			end,
+
+			-- More primitive debug here.
+			click = function(self, button)
+				print("click event:", button)
+			end,
+			hoverChange = function(self, state)
+				print("hoverChange event:", state)
+			end
+		},
+
 		yui.Button {
-			width = 40,
+			width = 80,
 			height = 120,
-			x = 0,
-			y = 0,
+			x = 10,
+			y = 40,
 
 			yui.Button {
 				width = 40,
@@ -35,6 +66,10 @@ local w = yui.Window {
 				events = {
 					hoverChange = function(self, state)
 						print("hoverChange event:", state)
+					end,
+					click = function(self)
+						-- Let’s block our parents’ onClick.
+						return true
 					end
 				}
 			},
@@ -42,8 +77,8 @@ local w = yui.Window {
 		yui.Button {
 			width = 40,
 			height = 40,
-			x = 40,
-			y = 0,
+			x = 100,
+			y = 40,
 		},
 	}
 }

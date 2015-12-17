@@ -99,6 +99,59 @@ function _M:getRoot()
 	return self
 end
 
+function _M:handleMouseButtonDown(event)
+	if self:within(event) then
+		for i = 1, #self.children do
+			local child = self.children[i]
+
+			if child:within(event) then
+				local r = child:handleMouseButtonDown(event)
+
+				if r then
+					return r
+				end
+			end
+		end
+
+		local root = self:getRoot()
+
+		root.clickedElement = self
+		self.clicked = true
+
+		if self.clickable then
+			self:triggerEvent("mouseDown", event.button)
+
+			return true
+		else
+			return self:triggerEvent("mouseDown", event.button)
+		end
+	end
+end
+
+function _M:handleMouseButtonUp(event)
+	if self:within(event) then
+		for i = 1, #self.children do
+			local child = self.children[i]
+
+			if child:within(event) then
+				local r = child:handleMouseButtonUp(event)
+
+				if r then
+					return r
+				end
+			end
+		end
+
+		self:triggerEvent("mouseUp", event.button)
+
+		local root = self:getRoot()
+
+		if root.clicked == self then
+			return self:triggerEvent("click", event.button)
+		end
+	end
+end
+
 function _M:drawChildren(renderer)
 	for i = 1, #self.children do
 		local child = self.children[i]
@@ -121,7 +174,7 @@ function _M:draw(renderer)
 	self:drawChildren(renderer)
 end
 
-function _M:updateChildren()
+function _M:updateChildren(dt)
 	for i = 1, #self.children do
 		local child = self.children[i]
 
@@ -129,15 +182,15 @@ function _M:updateChildren()
 			child.realX = child.x + self.realX
 			child.realY = child.y + self.realY
 
-			child:update()
+			child:update(dt)
 		end
 	end
 end
 
-function _M:update()
+function _M:update(dt)
 	self:triggerEvent("update")
 
-	self:updateChildren()
+	self:updateChildren(dt)
 end
 
 function _M:triggerEvent(event, ...)

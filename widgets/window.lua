@@ -46,6 +46,25 @@ function _M:handleEvent(event)
 		self:resetHover(x, y)
 
 		return true
+	elseif event.type == sdl.event.MouseButtonDown then
+		self:handleMouseButtonDown(event)
+	elseif event.type == sdl.event.MouseButtonUp then
+		self:handleMouseButtonUp(event)
+
+		-- Not being clicked on anymore, uh.
+		self.clickedElement.clicked = false
+		self.clickedElement = false
+	else
+		local t
+
+		for k,v in pairs(sdl.event) do
+			if event.type == v then
+				t = k
+				break
+			end
+		end
+
+		print("Unhandled event:", "SDL.event." .. t)
 	end
 end
 
@@ -77,6 +96,9 @@ function _M:new(arg)
 	self.root = self
 	self.focusedElements = {}
 	self.hoveredElements = {}
+
+	-- For further references. This will be replaced by a widget.
+	self.clicked = false
 
 	self.fonts = {}
 

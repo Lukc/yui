@@ -22,6 +22,8 @@ end
 
 function _M:new(arg)
 	Widget.new(self, arg)
+
+	self.clickable = true
 end
 
 return Object(_M, Widget)
