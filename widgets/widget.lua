@@ -146,7 +146,7 @@ function _M:handleMouseButtonUp(event)
 
 		local root = self:getRoot()
 
-		if root.clicked == self then
+		if root.clickedElement == self then
 			return self:triggerEvent("click", event.button)
 		end
 	end

@@ -57,6 +57,12 @@ local w = yui.Window {
 			x = 10,
 			y = 40,
 
+			events = {
+				click = function(self, button)
+					print("click event: ", button)
+				end,
+			},
+
 			yui.Button {
 				width = 40,
 				height = 40,
