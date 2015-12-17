@@ -3,7 +3,6 @@ local sdl = require "SDL"
 
 local Object = require "object"
 
-
 local _M = {
 	Widget    = require "widgets.widget",
 	Window    = require "widgets.window",
@@ -72,6 +71,15 @@ function _M:run(elements)
 		end
 
 		element.renderer:present()
+	end
+
+	-- Checking for exit request
+	for i = 1, #elements do
+		local element = elements[i]
+
+		if element.exit then
+			return false
+		end
 	end
 
 	return true

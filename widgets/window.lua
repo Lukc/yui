@@ -39,8 +39,12 @@ function _M:resetHover(x, y)
 	self:setHover(x, y)
 end
 
+-- @fixme Check all events are related to this window before returning true,
+--        which marks the event as being properly processed in yui.run().
 function _M:handleEvent(event)
-	if event.type == sdl.event.MouseMotion then
+	if event.type == sdl.event.Quit then
+		self:triggerEvent("quit")
+	elseif event.type == sdl.event.MouseMotion then
 		local _, x, y = sdl.getMouseState()
 
 		self:resetHover(x, y)
@@ -48,12 +52,16 @@ function _M:handleEvent(event)
 		return true
 	elseif event.type == sdl.event.MouseButtonDown then
 		self:handleMouseButtonDown(event)
+
+		return true
 	elseif event.type == sdl.event.MouseButtonUp then
 		self:handleMouseButtonUp(event)
 
 		-- Not being clicked on anymore, uh.
 		self.clickedElement.clicked = false
 		self.clickedElement = false
+
+		return true
 	else
 		local t
 
@@ -142,6 +150,14 @@ function _M:new(arg)
 	end
 
 	self.window:setMinimumSize(arg.minWidth or 0, arg.minHeight or 0)
+
+	if not self.eventListeners.quit then
+		self.eventListeners.quit = function(self)
+			print("Exit requested.")
+
+			self.exit = true
+		end
+	end
 end
 
 return Object(_M, Widget)
