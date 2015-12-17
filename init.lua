@@ -73,7 +73,7 @@ function _M:run(elements)
 	end
 
 	if timeDiff < 1000/60 then
-		sdl.delay(1000/60 - timeDiff)
+		sdl.delay(math.floor(1000/60 - timeDiff))
 
 		time = sdl.getTicks()
 		timeDiff = time - lastTime
