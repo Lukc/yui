@@ -153,8 +153,6 @@ function _M:new(arg)
 
 	if not self.eventListeners.quit then
 		self.eventListeners.quit = function(self)
-			print("Exit requested.")
-
 			self.exit = true
 		end
 	end

@@ -21,7 +21,6 @@ function _M:run(elements)
 		while i <= #elements do
 			local element = elements[i]
 
-			--print("Unhandled event:", e, e.type)
 			if element:handleEvent(e) then
 				i = #elements + 1
 			else
@@ -44,8 +43,6 @@ function _M:run(elements)
 
 		time = sdl.getTicks()
 		timeDiff = time - lastTime
-
-		--print("Too fast, delaying", timeDiff, 1000 / timeDiff)
 	end
 
 	lastTime = time
