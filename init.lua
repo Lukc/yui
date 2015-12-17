@@ -3,16 +3,12 @@ local sdl = require "SDL"
 
 local Object = require "object"
 
-local Widget    = require "widgets.widget"
-local Window    = require "widgets.window"
-local Button    = require "widgets.button"
-local Frame     = require "widgets.frame"
 
 local _M = {
-	Widget    = Widget,
-	Window    = Window,
-	Button    = Button,
-	Frame     = Frame,
+	Widget    = require "widgets.widget",
+	Window    = require "widgets.window",
+	Button    = require "widgets.button",
+	Frame     = require "widgets.frame",
 }
 
 local lastTime
