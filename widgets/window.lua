@@ -110,20 +110,6 @@ function _M:new(arg)
 
 	self.fonts = {}
 
-	local r, err = sdl.init {
-		sdl.flags.Video
-	}
-
-	if not r then
-		return nil, err
-	end
-
-	r, err = ttf.init()
-
-	if not r then
-		return nil, err
-	end
-
 	self.window, err = sdl.createWindow {
 		flags = arg.flags,
 		title = arg.title,

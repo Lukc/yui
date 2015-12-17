@@ -3,6 +3,14 @@ local sdl = require "SDL"
 
 local yui = require "init"
 
+local _, err yui.init()
+
+if err then
+	print(err)
+
+	os.exit(42)
+end
+
 local w = yui.Window {
 	width = 800,
 	height = 600,

@@ -1,5 +1,6 @@
 
 local sdl = require "SDL"
+local ttf = require "SDL.ttf"
 
 local Object = require "object"
 
@@ -8,7 +9,40 @@ local _M = {
 	Window    = require "widgets.window",
 	Button    = require "widgets.button",
 	Frame     = require "widgets.frame",
+
+	fonts = require "fonts"
 }
+
+function _M:init()
+	local r, err = sdl.init {
+		sdl.flags.Video
+	}
+
+	if not r then
+		return nil, err
+	end
+
+	r, err = ttf.init()
+	r, err = ttf.init()
+
+	if not r then
+		return nil, err
+	end
+
+	return true
+end
+
+function _M:loadFont(name, path, size)
+	local f, err = ttf.open(path, size)
+
+	-- We’re checking it exists to not overwrite any other previously
+	-- stored font.
+	if f then
+		fonts[name] = f
+	end
+
+	return f, err
+end
 
 local lastTime
 
