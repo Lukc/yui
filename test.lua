@@ -11,6 +11,14 @@ if err then
 	os.exit(42)
 end
 
+local _, err = yui:loadFont("default", "DejaVuSans.ttf", 18)
+
+if err then
+	print(err)
+
+	os.exit(47)
+end
+
 local w = yui.Window {
 	width = 800,
 	height = 600,
@@ -20,8 +28,10 @@ local w = yui.Window {
 	title = "Yui Test Window",
 
 	yui.Frame {
-		width = 180,
-		height = 180,
+		width = 280,
+		height = 170,
+
+		titleSize = 40,
 
 		-- As the parent is not a Container, we’ll be better off just giving
 		-- its position.
@@ -59,11 +69,25 @@ local w = yui.Window {
 			end
 		},
 
+		yui.Label {
+			x = 100,
+			y = 90,
+
+			text = "Hello world?"
+		},
+
 		yui.Button {
 			width = 80,
 			height = 120,
 			x = 10,
 			y = 40,
+
+			yui.Label {
+				text = "Test",
+
+				align = "center",
+				vAlign = "middle",
+			},
 
 			events = {
 				click = function(self, button)

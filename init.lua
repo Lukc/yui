@@ -9,6 +9,7 @@ local _M = {
 	Window    = require "widgets.window",
 	Button    = require "widgets.button",
 	Frame     = require "widgets.frame",
+	Label     = require "widgets.label",
 
 	fonts = require "fonts"
 }
@@ -23,11 +24,12 @@ function _M:init()
 	end
 
 	r, err = ttf.init()
-	r, err = ttf.init()
 
 	if not r then
 		return nil, err
 	end
+
+	print("Don’t forget to load fonts!")
 
 	return true
 end
@@ -38,7 +40,7 @@ function _M:loadFont(name, path, size)
 	-- We’re checking it exists to not overwrite any other previously
 	-- stored font.
 	if f then
-		fonts[name] = f
+		_M.fonts[name] = f
 	end
 
 	return f, err
