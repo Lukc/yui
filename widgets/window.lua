@@ -111,7 +111,7 @@ function _M:handleKeyboardEvent(eventName, event)
 	self:triggerEvent(eventName, self)
 end
 
-function _M:update()
+function _M:update(dt)
 	self.lastWidth, self.lastHeight = self.realWidth, self.realHeight
 	self.realWidth, self.realHeight = self.window:getSize()
 
@@ -123,6 +123,8 @@ function _M:update()
 	else
 		self.resized = false
 	end
+
+	self:triggerEvent("update", dt)
 
 	Widget.updateChildren(self)
 end
