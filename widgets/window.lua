@@ -58,8 +58,8 @@ function _M:handleEvent(event)
 		self:handleMouseButtonUp(event)
 
 		-- Not being clicked on anymore, uh.
-		self.clickedElement.clicked = false
-		self.clickedElement = false
+		self.clickedElement[event.button].clicked = false
+		self.clickedElement[event.button] = false
 
 		return true
 	else

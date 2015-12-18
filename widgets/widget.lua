@@ -129,7 +129,7 @@ function _M:handleMouseButtonDown(event)
 
 		local root = self:getRoot()
 
-		root.clickedElement = self
+		root.clickedElement[event.button] = self
 		self.clicked = true
 
 		if self.clickable then
@@ -160,7 +160,7 @@ function _M:handleMouseButtonUp(event)
 
 		local root = self:getRoot()
 
-		if root.clickedElement == self then
+		if root.clickedElement[event.button] == self then
 			self:setFocus()
 
 			return self:triggerEvent("click", event.button)
@@ -320,6 +320,9 @@ function _M:new(arg)
 
 	self.focused = false
 	self.hovered = false
+
+	-- Button-indexed.
+	self.clickedElement = {}
 
 	self.theme = arg.theme
 end

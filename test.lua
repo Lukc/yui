@@ -86,12 +86,14 @@ local w = yui.Window {
 				end
 			end,
 			mouseDown = function(self, button)
-				local state, x, y = sdl.getMouseState()
+				if button == sdl.mouseButton.Left then
+					local state, x, y = sdl.getMouseState()
 
-				self.dndData = {
-					x = x - self.realX,
-					y = y - self.realY
-				}
+					self.dndData = {
+						x = x - self.realX,
+						y = y - self.realY
+					}
+				end
 			end,
 			mouseUp = function(self, button)
 				self.dndData = nil
