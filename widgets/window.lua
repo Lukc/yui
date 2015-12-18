@@ -44,6 +44,15 @@ end
 function _M:handleEvent(event)
 	if event.type == sdl.event.Quit then
 		self:triggerEvent("quit")
+	elseif event.type == sdl.event.KeyDown then
+		self:handleKeyboardEvent("keyDown", event)
+		return true
+	elseif event.type == sdl.event.KeyUp then
+		self:handleKeyboardEvent("keyUp", event)
+		return true
+	elseif event.type == sdl.event.TextInput then
+		self:handleKeyboardEvent("textInput", event)
+		return true
 	elseif event.type == sdl.event.MouseMotion then
 		local _, x, y = sdl.getMouseState()
 
@@ -74,6 +83,26 @@ function _M:handleEvent(event)
 
 		print("Unhandled event:", "SDL.event." .. t)
 	end
+end
+
+function _M:handleKeyboardEvent(eventName, event)
+	for i = #self.focusedElements, 1, -1 do
+		local element = self.focusedElements[i]
+
+		if element.handleKeyboardEvent then
+			element:handleKeyboardEvent(eventName, event)
+
+			return true
+		else
+			local r = element:triggerEvent(eventName, event)
+
+			if r then
+				return r
+			end
+		end
+	end
+
+	self:triggerEvent(eventName, self)
 end
 
 function _M:update()

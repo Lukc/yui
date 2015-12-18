@@ -64,6 +64,12 @@ local w = yui.Window {
 
 	theme = theme,
 
+	events = {
+		keyDown = function(self, event)
+			print("Received a keyDown event!")
+		end
+	},
+
 	yui.Frame {
 		width = 280,
 		height = 180,
@@ -115,14 +121,12 @@ local w = yui.Window {
 			y = 50,
 			x = 10,
 
-			yui.Button {
+			yui.TextInput {
 				height = 40,
 
-				yui.Label {
-					text = "Line 1",
-					align = "center",
-					vAlign = "middle"
-				}
+				text = "Line 1",
+				align = "center",
+				vAlign = "middle"
 			},
 			yui.Button {
 				height = 40,

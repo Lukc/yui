@@ -11,24 +11,31 @@ function _M:update()
 	Widget.update(self)
 
 	if self.updateNeeded then
-		local _
+		if self.text and self.text ~= "" then
+			local _
 
-		local root = self:getRoot()
-		local renderer = root.renderer
+			local root = self:getRoot()
+			local renderer = root.renderer
 
-		local color = self.color or
-			self:themeData("defaultFontColor") or 0xFFFFFF
-		local font = self.font or
-			self:themeData("defaultFont") or "default"
+			local color = self.color or
+				self:themeData("defaultFontColor") or 0xFFFFFF
+			local font = self.font or
+				self:themeData("defaultFont") or "default"
 
-		self.surface =
-			fonts[font]:renderUtf8(self.text, "solid", color)
+			self.surface =
+				fonts[font]:renderUtf8(self.text, "solid", color)
 
-		self.texture =
-			renderer:createTextureFromSurface(self.surface)
+			self.texture =
+				renderer:createTextureFromSurface(self.surface)
 
-		_, _, self.realWidth, self.realHeight =
-			self.texture:query()
+			_, _, self.realWidth, self.realHeight =
+				self.texture:query()
+		else
+			self.surface = nil
+			self.texture = nil
+
+			self.realWidth, self.realHeight = 0, 0
+		end
 
 		self.updateNeeded = false
 	end
@@ -61,12 +68,14 @@ function _M:draw(renderer)
 
 	local _, _, width, height = self.texture:query()
 
-	renderer:copy(self.texture, nil, {
-		x = self.realX,
-		y = self.realY,
-		w = width,
-		h = height
-	})
+	if self.texture then
+		renderer:copy(self.texture, nil, {
+			x = self.realX,
+			y = self.realY,
+			w = width,
+			h = height
+		})
+	end
 
 	renderer:drawRect {
 		x = self.realX,

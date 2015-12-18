@@ -11,6 +11,7 @@ local _M = {
 	Frame     = require "widgets.frame",
 	Label     = require "widgets.label",
 	Column    = require "widgets.column",
+	TextInput = require "widgets.text_input",
 
 	fonts = require "fonts"
 }
