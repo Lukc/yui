@@ -81,6 +81,8 @@ function _M:run(elements)
 		timeDiff = time - lastTime
 	end
 
+	_M.FPS = 1000 / timeDiff
+
 	lastTime = time
 
 	-- Update
