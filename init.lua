@@ -2,6 +2,10 @@
 local sdl = require "SDL"
 local ttf = require "SDL.ttf"
 
+local oldPath = package.path
+
+package.path = "yui/?.lua;" .. package.path
+
 local Object = require "object"
 
 local _M = {
@@ -121,6 +125,8 @@ function _M:run(elements)
 
 	return true
 end
+
+package.path = oldPath
 
 return _M
 
