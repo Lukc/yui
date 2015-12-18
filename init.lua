@@ -10,6 +10,7 @@ local _M = {
 	Button    = require "widgets.button",
 	Frame     = require "widgets.frame",
 	Label     = require "widgets.label",
+	Column    = require "widgets.column",
 
 	fonts = require "fonts"
 }

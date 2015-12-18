@@ -33,7 +33,7 @@ local theme = {
 
 		renderer:fillRect(rectangle)
 
-		renderer:setDrawColor(0x88FFFF)
+		renderer:setDrawColor(0x888888)
 
 		renderer:drawRect(rectangle)
 	end,
@@ -106,8 +106,51 @@ local w = yui.Window {
 			end
 		},
 
+		yui.Column {
+			width = 100,
+			height = 120,
+
+			y = 50,
+			x = 10,
+
+			yui.Button {
+				height = 40,
+
+				yui.Label {
+					text = "Line 1",
+					align = "center",
+					vAlign = "middle"
+				}
+			},
+			yui.Button {
+				height = 40,
+
+				yui.Label {
+					text = "Line 2",
+					align = "center",
+					vAlign = "middle"
+				}
+			},
+			yui.Button {
+				height = 40,
+
+				yui.Label {
+					text = "Line 3",
+					align = "center",
+					vAlign = "middle"
+				}
+			}
+		},
+
+		yui.Button {
+			width = 40,
+			height = 40,
+			x = 120,
+			y = 50,
+		},
+
 		yui.Label {
-			x = 100,
+			x = 120,
 			y = 100,
 
 			events = {
@@ -115,49 +158,6 @@ local w = yui.Window {
 					self:setText("FPS: " .. tostring(yui.FPS - yui.FPS % 0.1))
 				end
 			}
-		},
-
-		yui.Button {
-			width = 80,
-			height = 120,
-			x = 10,
-			y = 50,
-
-			yui.Label {
-				text = "Test",
-
-				align = "center",
-				vAlign = "middle",
-			},
-
-			events = {
-				click = function(self, button)
-					print("click event: ", button)
-				end,
-			},
-
-			yui.Button {
-				width = 40,
-				height = 40,
-				x = 0,
-				y = 40,
-
-				events = {
-					hoverChange = function(self, state)
-						print("hoverChange event:", state)
-					end,
-					click = function(self)
-						-- Let’s block our parents’ onClick.
-						return true
-					end
-				}
-			},
-		},
-		yui.Button {
-			width = 40,
-			height = 40,
-			x = 100,
-			y = 50,
 		},
 	}
 }

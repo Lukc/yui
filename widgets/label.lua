@@ -55,6 +55,10 @@ end
 function _M:draw(renderer)
 	renderer:setDrawColor(0xFFFFFF)
 
+	if not self.texture then
+		return
+	end
+
 	local _, _, width, height = self.texture:query()
 
 	renderer:copy(self.texture, nil, {
@@ -79,6 +83,13 @@ function _M:setText(text)
 end
 
 function _M:new(arg)
+	if type(arg) == "string" then
+		print("String arg.")
+		arg = {
+			text = arg
+		}
+	end
+
 	Widget.new(self, arg)
 
 	self:setText(arg.text)
