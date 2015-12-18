@@ -2,5 +2,28 @@
 Yeay User Interface
 ===================
 
-A work in progress, because “why not”?
+Alternate Names
+---------------
+
+  - YUI User Interface
+  - Yui’s User Interface (although I cannot tell who Yui is)
+
+Description
+-----------
+
+A work in progress. I started it thinking “Why not?”.
+
+But it’s supposed to be a somewhat declarative GUI library, inspired by
+minor projects like yaoui or HTML.
+
+Usage
+=====
+
+Nope. Nope nope nope. We’re not done yet.
+
+But basically, you run `yui.init()`, you load a few fonts with
+`yui:loadFont()`, and then you create windows (with `ui.Window`),
+and then you `yui.run(aTableOfYourWindows)` until it doesn’t work anymore.
+
+Clear instructions will come later.
 
