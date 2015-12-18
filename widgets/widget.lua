@@ -42,6 +42,20 @@ function _M:addChild(child)
 end
 
 ---
+-- Returns a luasdl2 rectangle, usable for drawing operations without further
+-- modification.
+--
+-- The dimensions and coordinates of that rectangle are those of the Widget.
+function _M:rectangle()
+	return {
+		x = self.realX,
+		y = self.realY,
+		w = self.realWidth,
+		h = self.realHeight
+	}
+end
+
+---
 -- Removes a child from an element.
 function _M:removeChild(child)
 	local root = self:getRoot()
@@ -252,6 +266,30 @@ function _M:setFocus()
 	end
 end
 
+function _M:themeData(name)
+	local element = self
+
+	while element do
+		if element.theme and element.theme[name] then
+			return element.theme[name]
+		end
+
+		element = element.parent
+	end
+end
+
+function _M:themeDraw(name, renderer)
+	local name = "draw" .. name
+
+	local cb = self:themeData(name)
+
+	if cb then
+		cb(self, renderer)
+
+		return true
+	end
+end
+
 function _M:new(arg)
 	self.children = {}
 
@@ -282,6 +320,8 @@ function _M:new(arg)
 
 	self.focused = false
 	self.hovered = false
+
+	self.theme = arg.theme
 end
 
 return Object(_M)

@@ -16,8 +16,13 @@ function _M:update()
 		local root = self:getRoot()
 		local renderer = root.renderer
 
+		local color = self.color or
+			self:themeData("defaultFontColor") or 0xFFFFFF
+		local font = self.font or
+			self:themeData("defaultFont") or "default"
+
 		self.surface =
-			fonts[self.font]:renderUtf8(self.text, "solid", self.color)
+			fonts[font]:renderUtf8(self.text, "solid", color)
 
 		self.texture =
 			renderer:createTextureFromSurface(self.surface)
@@ -78,9 +83,10 @@ function _M:new(arg)
 
 	self:setText(arg.text)
 
-	self.font = arg.font or "default"
-
-	self.color = arg.color or 0xFFFFFF
+	-- Fallbacks are available in theme data.
+	-- Secondary fallbacks are hardcoded and you shouldn’t rely on those.
+	self.font = arg.font
+	self.color = arg.color
 
 	self.align = arg.align or "left"
 	self.vAlign = arg.vAlign or "top"

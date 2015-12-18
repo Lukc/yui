@@ -19,6 +19,41 @@ if err then
 	os.exit(47)
 end
 
+local theme = {
+	drawButton = function(self, renderer)
+		local rectangle = self:rectangle()
+
+		if self.clicked and self.hovered then
+			renderer:setDrawColor(0x44BBFF)
+		elseif self.hovered then
+			renderer:setDrawColor(0xDDDDDD)
+		else
+			renderer:setDrawColor(0xCCCCCC)
+		end
+
+		renderer:fillRect(rectangle)
+
+		renderer:setDrawColor(0x88FFFF)
+
+		renderer:drawRect(rectangle)
+	end,
+	drawFrame = function(self, renderer)
+		local body = self:rectangle()
+		body.h = body.h - self.titleHeight
+		body.y = body.y + self.titleHeight
+		local header = self:rectangle()
+		header.h = self.titleHeight
+
+		renderer:setDrawColor(0xEEEEEE)
+		renderer:fillRect(body)
+
+		renderer:setDrawColor(0x333333)
+		renderer:fillRect(header)
+	end,
+
+	defaultFontColor = 0x000000
+}
+
 local w = yui.Window {
 	width = 800,
 	height = 600,
@@ -27,16 +62,18 @@ local w = yui.Window {
 
 	title = "Yui Test Window",
 
+	theme = theme,
+
 	yui.Frame {
 		width = 280,
-		height = 170,
+		height = 180,
 
-		titleSize = 40,
+		titleHeight = 40,
 
 		-- As the parent is not a Container, we’ll be better off just giving
 		-- its position.
 		x = 100,
-		y = 100,
+		y = 110,
 
 		events = {
 			-- Implementing some simple Drag’n’Drop.
@@ -71,7 +108,7 @@ local w = yui.Window {
 
 		yui.Label {
 			x = 100,
-			y = 90,
+			y = 100,
 
 			events = {
 				update = function(self)
@@ -84,7 +121,7 @@ local w = yui.Window {
 			width = 80,
 			height = 120,
 			x = 10,
-			y = 40,
+			y = 50,
 
 			yui.Label {
 				text = "Test",
@@ -120,7 +157,7 @@ local w = yui.Window {
 			width = 40,
 			height = 40,
 			x = 100,
-			y = 40,
+			y = 50,
 		},
 	}
 }
