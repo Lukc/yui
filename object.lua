@@ -8,7 +8,9 @@
 return function(class, parent)
 	setmetatable(class, {
 		__call = function(self, ...)
-			local instance = {}
+			local instance = {
+				objectType = self
+			}
 
 			setmetatable(instance, {
 				__index = class
