@@ -9,6 +9,12 @@ local _M = {}
 
 _M.backgroundColor = 0x000000
 
+function _M:draw(renderer)
+	Widget.draw(self, renderer)
+
+	self:triggerEvent("draw", renderer)
+end
+
 function _M:resetHover(x, y)
 	local element
 	local i = 1
