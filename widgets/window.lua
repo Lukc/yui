@@ -108,7 +108,7 @@ function _M:handleKeyboardEvent(eventName, event)
 		end
 	end
 
-	self:triggerEvent(eventName, self)
+	self:triggerEvent(eventName, event)
 end
 
 function _M:update(dt)
