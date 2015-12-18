@@ -73,8 +73,6 @@ local w = yui.Window {
 			x = 100,
 			y = 90,
 
-			text = "",
-
 			events = {
 				update = function(self)
 					self:setText("FPS: " .. tostring(yui.FPS - yui.FPS % 0.1))
