@@ -51,7 +51,7 @@ end
 --
 -- @see Widget:update
 function _M:update(dt)
-	self:triggerEvent("update")
+	Widget.update(self, dt)
 
 	for i = 1, #self.children do
 		local child = self.children[i]
@@ -73,7 +73,7 @@ end
 function _M:new(arg)
 	Widget.new(self, arg)
 
-	self.titleHeight = arg.titleHeight or 30
+	self.titleHeight = arg.titleHeight or 0
 
 	self.clickable = true
 end
