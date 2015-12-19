@@ -240,6 +240,14 @@ end
 function _M:update(dt)
 	self:triggerEvent("update", dt)
 
+	if self.width then
+		self.realWidth = self.width or self.realWidth
+	end
+
+	if self.height then
+		self.realHeight = self.height or self.realHeight
+	end
+
 	self:updateChildren(dt)
 end
 
