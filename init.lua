@@ -7,6 +7,7 @@
 
 local sdl = require "SDL"
 local ttf = require "SDL.ttf"
+local image = require "SDL.image"
 
 local oldPath = package.path
 
@@ -23,6 +24,7 @@ local _M = {
 	Column    = require "widgets.column",
 	Row       = require "widgets.row",
 	TextInput = require "widgets.text_input",
+	Image     = require "widgets.image",
 
 	fonts = require "fonts",
 
@@ -45,6 +47,14 @@ function _M:init()
 	end
 
 	r, err = ttf.init()
+
+	if not r then
+		return nil, err
+	end
+
+	r, err = image.init {
+		image.flags.JPG, image.flags.PNG, image.flags.TIF
+	}
 
 	if not r then
 		return nil, err
