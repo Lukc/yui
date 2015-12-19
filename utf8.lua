@@ -1,9 +1,11 @@
 
 ---
+-- Unicode strings management module.
+--
 -- Source:
 --   https://github.com/blitmap/lua-utf8-simple/blob/master/utf8_simple.lua
 --
--- Thanks, blitmap! o/
+-- @author blitmap
 --
 
 -- ABNF from RFC 3629
@@ -39,7 +41,9 @@ local utf8 = {}
 
 -- THE MEAT
 
--- maps f over s's utf8 characters f can accept args: (visual_index, utf8_character, byte_index)
+---
+-- maps f over s's utf8 characters f can accept args:
+-- (`visual_index`, `utf8_character`, `byte_index`)
 utf8.map =
 	function (s, f, no_subs)
 		local i = 0
@@ -60,12 +64,14 @@ utf8.map =
 
 -- THE REST
 
+---
 -- generator for the above -- to iterate over all utf8 chars
 utf8.chars =
 	function (s, no_subs)
 		return coroutine.wrap(function () return utf8.map(s, coroutine.yield, no_subs) end)
 	end
 
+---
 -- returns the number of characters in a UTF-8 string
 utf8.len =
 	function (s)
@@ -73,12 +79,13 @@ utf8.len =
 		return select(2, s:gsub('[^\128-\193]', ''))
 	end
 
+---
 -- replace all utf8 chars with mapping
 utf8.replace =
 	function (s, map)
 		return s:gsub(pattern, map)
 	end
-
+---
 -- reverse a utf8 string
 utf8.reverse =
 	function (s)
@@ -88,12 +95,14 @@ utf8.reverse =
 		return s:reverse()
 	end
 
+---
 -- strip non-ascii characters from a utf8 string
 utf8.strip =
 	function (s)
 		return s:gsub(pattern, function (c) return #c > 1 and '' end)
 	end
 
+---
 -- like string.sub() but i, j are utf8 strings
 -- a utf8-safe string.sub()
 utf8.sub =

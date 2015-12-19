@@ -1,10 +1,23 @@
 
+---
+-- Frame class.
+--
+-- A frame is basically a sub-window.
+--
+-- Frames are clickable.
+--
+-- @classmod Frame
+
 local Object = require "object"
 
 local Widget = require "widgets.widget"
 
 local _M = {}
 
+---
+-- Frame drawing method.
+--
+-- @see Widget:draw
 function _M:draw(renderer)
 	if not self:themeDraw("Frame", renderer) then
 		if self.clicked then
@@ -33,6 +46,10 @@ function _M:draw(renderer)
 	self:drawChildren(renderer)
 end
 
+---
+-- Frame update method.
+--
+-- @see Widget:update
 function _M:update(dt)
 	self:triggerEvent("update")
 
@@ -46,6 +63,13 @@ function _M:update(dt)
 	self:updateChildren(dt)
 end
 
+---
+-- Constructor.
+--
+-- @param arg Table of options, given to `Widget:new`.
+-- @param arg.titleHeight Height of the top part of the frame.
+--
+-- @see Widget:new
 function _M:new(arg)
 	Widget.new(self, arg)
 

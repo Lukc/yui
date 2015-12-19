@@ -1,10 +1,23 @@
 
+---
+-- Column class.
+--
+-- Columns are containers that edit their children’s position to make them
+-- fit as if they had been aligned in a column.
+-- 
+-- If a child has an `align` property of `center`, it will be horizontally
+-- centered in the column.
+--
+-- @classmod Column
+
 local Object = require "object"
 
 local Widget = require "widgets.widget"
 
 local _M = {}
 
+---
+-- Column updating method.
 function _M:update(dt)
 	local height = 0
 
@@ -29,7 +42,13 @@ function _M:update(dt)
 	end
 end
 
--- @fixme Take care of overflows.
+---
+-- Column drawing method.
+--
+-- If available, uses the `drawColumn` theme element to draw itself.
+--
+-- @todo Take care of graphical overflows.
+-- @see Widget:draw
 function _M:draw(renderer)
 	if not self:themeDraw("Column", renderer) then
 		if self.hovered then
@@ -44,6 +63,10 @@ function _M:draw(renderer)
 	self:drawChildren(renderer)
 end
 
+---
+-- Constructor.
+--
+-- @see Widget:new
 function _M:new(arg)
 	Widget.new(self, arg)
 

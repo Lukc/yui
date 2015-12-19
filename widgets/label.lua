@@ -1,4 +1,9 @@
 
+---
+-- Text box widget.
+--
+-- @classmod Label
+
 local Object = require "object"
 
 local Widget = require "widgets.widget"
@@ -85,12 +90,39 @@ function _M:draw(renderer)
 	}
 end
 
+---
+-- Resets the text displayed in the Label, if any.
+-- @param text New text to display.
 function _M:setText(text)
 	self.text = text
 
 	self.updateNeeded = true
 end
 
+---
+-- Changes the color of the displayed text.
+-- @param color New color.
+function _M:setColor(color)
+	self.color = color
+
+	self.updateNeeded = true
+end
+
+---
+-- Label constructor.
+--
+-- @param arg Table of options, given to `Widget:new`
+-- @param arg.text Value given to `Label.setText`
+-- @param arg.color Color of the text.
+-- @param arg.font Font used to draw the text. Defaults to `yui.fonts.default`.
+-- @param arg.align `"left"`, `"center"` or "`right`". Defines how the Label
+--  will be aligned in its parent.
+-- @param arg.vAlign `"top"`, `"middle"` or "`bottom`". Defines how the Label
+--  will be aligned in its parent.
+--
+-- @see Widget:new
+-- @see Label:setText
+-- @see Label:setColor
 function _M:new(arg)
 	if type(arg) == "string" then
 		print("String arg.")

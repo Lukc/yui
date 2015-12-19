@@ -1,10 +1,26 @@
 
+---
+-- Button class.
+--
+-- Buttons are meant to have a `Label` child unless you want to manually draw
+-- them.
+--
+-- Buttons are clickable.
+--
+-- @classmod Button
+
 local Object = require "object"
 
 local Widget = require "widgets.widget"
 
 local _M = {}
 
+---
+-- Button drawing method.
+--
+-- Uses the `drawButton` theme element to draw itself if available.
+--
+-- @see Widget:draw
 function _M:draw(renderer)
 	if not self:themeDraw("Button", renderer) then
 		if self.hovered then
@@ -19,6 +35,10 @@ function _M:draw(renderer)
 	self:drawChildren(renderer)
 end
 
+---
+-- Button constructor.
+--
+-- @see Widget:new
 function _M:new(arg)
 	Widget.new(self, arg)
 

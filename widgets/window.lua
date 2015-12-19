@@ -1,4 +1,9 @@
 
+---
+-- Window class and constructor.
+--
+-- @classmod Window
+
 local sdl = require "SDL"
 local ttf = require "SDL.ttf"
 
@@ -7,14 +12,22 @@ local Widget = require "widgets.widget"
 
 local _M = {}
 
+---
+-- Default window background color.
 _M.backgroundColor = 0x000000
 
+---
+-- @see Widget:draw
 function _M:draw(renderer)
 	Widget.draw(self, renderer)
 
 	self:triggerEvent("draw", renderer)
 end
 
+---
+-- Makes it so that no child is marked as being hovered on.
+--
+-- Triggers the corresponding events accordingly.
 function _M:resetHover(x, y)
 	local element
 	local i = 1
@@ -45,8 +58,10 @@ function _M:resetHover(x, y)
 	self:setHover(x, y)
 end
 
--- @fixme Check all events are related to this window before returning true,
---        which marks the event as being properly processed in yui.run().
+---
+-- Generic events handler.
+-- @todo Check all events are related to this window before returning true,
+--  which marks the event as being properly processed in yui.run().
 function _M:handleEvent(event)
 	if event.type == sdl.event.Quit then
 		self:triggerEvent("quit")
@@ -91,6 +106,11 @@ function _M:handleEvent(event)
 	end
 end
 
+---
+-- Key press events handler.
+--
+-- @param eventName Name of the event to handle.
+-- @param event An SDL event.
 function _M:handleKeyboardEvent(eventName, event)
 	for i = #self.focusedElements, 1, -1 do
 		local element = self.focusedElements[i]
@@ -111,6 +131,13 @@ function _M:handleKeyboardEvent(eventName, event)
 	self:triggerEvent(eventName, event)
 end
 
+---
+-- Triggers `update` and `resize` events on self as needed.
+--
+-- Its `realWidth` and `realHeight` values are also updated to match the size
+-- of the actual SDL window.
+--
+-- @see Widget:update
 function _M:update(dt)
 	self.lastWidth, self.lastHeight = self.realWidth, self.realHeight
 	self.realWidth, self.realHeight = self.window:getSize()
@@ -130,11 +157,14 @@ function _M:update(dt)
 end
 
 ---
+-- Constructor.
 -- @todo A lot of things are currently stored in Window, but should not.
---       fonts, for example, should be UI-wide, not Window-related.
+--  fonts, for example, should be UI-wide, not Window-related.
 -- @todo We should not expect to receive SDL flags or constants from the
---       outside. Although it works in the short run, it’ll prove problematic
---       if we decide to support multiple backends later.
+--  outside. Although it works in the short run, it’ll prove problematic
+--  if we decide to support multiple backends later.
+--
+-- @see Widget
 function _M:new(arg)
 	Widget.new(self, arg)
 

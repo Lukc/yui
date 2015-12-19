@@ -1,4 +1,15 @@
 
+---
+-- TextInput class.
+--
+-- TextInputs are clickable.
+--
+-- They are implemented using a hidden `Label`.
+--
+-- @classmod TextInput
+--
+-- @see Label
+
 local sdl = require "SDL"
 
 local utf8 = require "utf8"
@@ -12,6 +23,11 @@ local fonts = require "fonts"
 
 local _M = {}
 
+---
+-- Keyboard events handler.
+--
+-- Is responsible for editing the TextInput’s content when certain keys are
+-- pressed.
 function _M:handleKeyboardEvent(eventName, event)
 	local r
 
@@ -39,12 +55,18 @@ function _M:handleKeyboardEvent(eventName, event)
 	end
 end
 
+---
+-- TextInput update method.
+-- @see Widget:update
 function _M:update(dt)
 	Widget.update(self, dt)
 
 	Label.update(self.label, dt)
 end
 
+---
+-- TextInput draw method.
+-- @see Widget:draw
 function _M:draw(renderer)
 	if self.hovered then
 		renderer:setDrawColor(0x00FFFF)
@@ -64,6 +86,8 @@ function _M:draw(renderer)
 	self.label:draw(renderer)
 end
 
+---
+-- @see Widget:new
 function _M:new(arg)
 	Widget.new(self, arg)
 

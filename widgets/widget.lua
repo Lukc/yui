@@ -1,16 +1,23 @@
 
+---
+-- Core Widget class.
+--
+-- @classmod Widget
+
 local sdl = require "SDL"
 
 local Object = require "object"
 
 local _M = {}
 
----
--- Default values. Try not to rely on those.
+--- Default requested widget width.
 _M.width = nil
+--- Default requested widget height.
 _M.height = nil
 
+--- Default requested widget x position.
 _M.x = 0
+--- Default requested widget y position.
 _M.y = 0
 
 -- The real- variants are the values actually used by yurui. They’re calculated
@@ -18,14 +25,23 @@ _M.y = 0
 -- For example, realX will be the child offset (widget.x) plus the parent’s
 -- realX.
 
+--- Actual widget width.
+-- Should not be edited from outside Yui.
 _M.realWidth = 0
+--- Actual widget height.
+-- Should not be edited from outside Yui.
 _M.realHeight = 0
 
+--- Actual widget x position.
+-- Should not be edited from outside Yui.
 _M.realX = 0
+--- Actual widget y position.
+-- Should not be edited from outside Yui.
 _M.realY = 0
 
 ---
--- Indicates whether or not a point is located within a widget.
+-- Indicates whether or not a point is located within the rectangle that
+-- represents the drawing area of a widget.
 function _M:within(p)
 	return
 		p.x >= self.realX and p.x < self.realX + self.realWidth and
@@ -34,6 +50,8 @@ end
 
 ---
 -- Adds a child to an element.
+--
+-- @tparam Widget child
 function _M:addChild(child)
 	self.children[#self.children+1] = child
 	child.parent = self
@@ -113,6 +131,8 @@ function _M:getRoot()
 	return self
 end
 
+---
+-- Internal helper to handle mouse events.
 function _M:handleMouseButtonDown(event)
 	if self:within(event) then
 		for i = 1, #self.children do
@@ -142,6 +162,8 @@ function _M:handleMouseButtonDown(event)
 	end
 end
 
+---
+-- Internal helper to handle mouse events.
 function _M:handleMouseButtonUp(event)
 	if self:within(event) then
 		for i = 1, #self.children do
@@ -168,6 +190,10 @@ function _M:handleMouseButtonUp(event)
 	end
 end
 
+---
+-- Draws the children of an element on a given SDL2 renderer.
+--
+-- @see Widget:draw
 function _M:drawChildren(renderer)
 	for i = 1, #self.children do
 		local child = self.children[i]
@@ -178,6 +204,8 @@ function _M:drawChildren(renderer)
 	end
 end
 
+---
+-- Draws the element on a given SDL2 renderer.
 function _M:draw(renderer)
 	renderer:setDrawColor(0x000000)
 	renderer:drawRect {
@@ -190,6 +218,8 @@ function _M:draw(renderer)
 	self:drawChildren(renderer)
 end
 
+---
+-- Updates the children of an element.
 function _M:updateChildren(dt)
 	for i = 1, #self.children do
 		local child = self.children[i]
@@ -203,18 +233,34 @@ function _M:updateChildren(dt)
 	end
 end
 
+---
+-- Time-based update of an element.
+--
+-- Also triggers an `update` event.
 function _M:update(dt)
-	self:triggerEvent("update")
+	self:triggerEvent("update", dt)
 
 	self:updateChildren(dt)
 end
 
+---
+-- Triggers a specific event.
+--
+-- If the element has an event listener for that particular event, that
+-- listener will be called.
+--
+-- Any additional parameter will be given to the listener when called.
+--
+-- @param event The name of the event to trigger.
+-- @param ...   Anything to give to the event listener.
 function _M:triggerEvent(event, ...)
 	if self.eventListeners[event] then
 		return self.eventListeners[event](self, ...)
 	end
 end
 
+---
+-- Marks an element as being hovered by a mouse cursor.
 function _M:setHover(x, y)
 	if not self.hovered then
 		local root = self:getRoot()
@@ -237,8 +283,12 @@ function _M:setHover(x, y)
 end
 
 ---
+-- Marks an element being focused.
+--
+-- Focused elements are the only elements that can receive key press events.
+--
 -- @todo Triggers too many events (focusLost and focusReceived can both be
---       triggered during a single update).
+--  triggered during a single update).
 function _M:setFocus()
 	local root = self:getRoot()
 
@@ -266,6 +316,13 @@ function _M:setFocus()
 	end
 end
 
+---
+-- Gets a theme value for a given element.
+--
+-- If the element has no theme or an incomplete theme, the value will be
+-- looked for in its parents.
+--
+-- If no parent has the required property, the method will return `nil`.
 function _M:themeData(name)
 	local element = self
 
@@ -278,6 +335,10 @@ function _M:themeData(name)
 	end
 end
 
+---
+-- Calls a theme drawing function.
+--
+-- @see Widget:themeData
 function _M:themeDraw(name, renderer)
 	local name = "draw" .. name
 
@@ -290,6 +351,21 @@ function _M:themeDraw(name, renderer)
 	end
 end
 
+---
+-- Widget constructor.
+--
+-- The `height`, `width`, `x` and `y` values can be ignored by specific
+-- parents.
+--
+-- @param arg Table of options. The first integer-indexed values are treated
+--  as children to append to the widget.
+-- @param arg.height Requested height of the Widget.
+-- @param arg.width Requested Width of the Widget.
+-- @param arg.x Requested x position.
+-- @param arg.y Requested y position.
+-- @param arg.theme Widget’s theme, if any.
+-- @param arg.id Unique identifier.
+-- @param arg.events Table of event listeners. The keys are event names.
 function _M:new(arg)
 	self.children = {}
 
