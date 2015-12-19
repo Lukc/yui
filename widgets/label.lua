@@ -51,7 +51,8 @@ function _M:update()
 		self.realX = self.parent.realX + self.x +
 			(self.parent.realWidth - self.realWidth) / 2
 	elseif self.align == "right" then
-		self.realX = self.parent.realX + self.parent.realWidth - self.realWidth
+		self.realX = self.parent.realX + self.x +
+			self.parent.realWidth - self.realWidth
 	end
 
 	if self.vAlign == "top" then
@@ -59,8 +60,9 @@ function _M:update()
 	elseif self.vAlign == "middle" then
 		self.realY = self.parent.realY + self.y +
 			(self.parent.realHeight - self.realHeight) / 2
-	elseif self.align == "bottom" then
-		self.realY = self.parent.realY + self.parent.realHeight - self.realHeight
+	elseif self.vAlign == "bottom" then
+		self.realY = self.parent.realY + self.x +
+			self.parent.realHeight - self.realHeight
 	end
 end
 
