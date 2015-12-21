@@ -20,7 +20,7 @@ _M.x = 0
 --- Default requested widget y position.
 _M.y = 0
 
--- The real- variants are the values actually used by yurui. They’re calculated
+-- The real- variants are the values actually used by Yui. They’re calculated
 -- not only with the widget’s configuration, but with the parent’s as well.
 -- For example, realX will be the child offset (widget.x) plus the parent’s
 -- realX.
