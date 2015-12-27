@@ -75,21 +75,7 @@ function _M:draw(renderer)
 
 	local _, _, width, height = self.texture:query()
 
-	if self.texture then
-		renderer:copy(self.texture, nil, {
-			x = self.realX,
-			y = self.realY,
-			w = width,
-			h = height
-		})
-	end
-
-	renderer:drawRect {
-		x = self.realX,
-		y = self.realY,
-		w = self.realWidth,
-		h = self.realHeight
-	}
+	self:drawTexture(renderer, self.texture)
 end
 
 ---

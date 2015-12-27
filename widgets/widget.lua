@@ -205,6 +205,36 @@ function _M:drawChildren(renderer)
 end
 
 ---
+-- Helps in drawing texture without provoking overflows.
+function _M:drawTexture(renderer, texture)
+	local destination = self:rectangle()
+	local source = {
+		x = 0, y = 0,
+		w = destination.w, h = destination.h
+	}
+
+	local parent = self.parent
+
+	local xOverflow =
+	(self.realWidth + self.realX) -
+	(parent.realWidth + parent.realX)
+	if xOverflow > 0 then
+		source.w = source.w - xOverflow
+		destination.w = destination.w - xOverflow
+	end
+
+	local yOverflow =
+	(self.realHeight + self.realY) -
+	(parent.realHeight + parent.realY)
+	if yOverflow > 0 then
+		source.h = source.h - yOverflow
+		destination.h = destination.h - yOverflow
+	end
+
+	renderer:copy(texture, source, destination)
+end
+
+---
 -- Draws the element on a given SDL2 renderer.
 function _M:draw(renderer)
 	renderer:setDrawColor(0x000000)
