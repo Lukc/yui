@@ -78,7 +78,7 @@ function _M:new(arg)
 
 	self.align = arg.align
 
-	self.padding = arg.padding
+	self.spacing = arg.spacing
 end
 
 return Object(_M, Widget)
