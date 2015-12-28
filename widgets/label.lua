@@ -28,7 +28,7 @@ function _M:update(dt)
 				self:themeData("defaultFont") or "default"
 
 			self.surface =
-				fonts[font]:renderUtf8(self.text, "solid", color)
+				fonts[font]:renderUtf8(self.text, "blended", color)
 
 			self.texture =
 				renderer:createTextureFromSurface(self.surface)
