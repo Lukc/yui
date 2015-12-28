@@ -19,6 +19,8 @@ _M.backgroundColor = 0x000000
 ---
 -- @see Widget:draw
 function _M:draw(renderer)
+	self:themeDraw("Window", renderer)
+
 	Widget.draw(self, renderer)
 
 	self:triggerEvent("draw", renderer)
