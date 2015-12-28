@@ -120,6 +120,35 @@ function _M:getElementById(id)
 end
 
 ---
+--
+function _M:getElementsByClass(class, out)
+	if not out then
+		out = {}
+	end
+
+	if self:hasClass(class) then
+		out[#out+1] = self
+	end
+
+	for i = 1, #self.children do
+		local child = self.children[i]
+
+		child:getElementsByClass(class, out)
+	end
+
+	return out
+end
+
+
+function _M:hasClass(class)
+	for i = 1, #self.classes do
+		if self.classes[i] == class then
+			return true
+		end
+	end
+end
+
+---
 -- Returns the root element of a document.
 --
 -- Usually, that “root element” would be the window containing the widget.
@@ -446,6 +475,18 @@ function _M:new(arg)
 	self.clickedElement = {}
 
 	self.theme = arg.theme
+
+	if arg.class then
+		self.classes = {arg.class}
+	end
+
+	if arg.classes then
+		self.classes = arg.classes
+	end
+
+	if not self.classes then
+		self.classes = {}
+	end
 end
 
 return Object(_M)
