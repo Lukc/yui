@@ -173,6 +173,17 @@ function _M:run(elements)
 	return true
 end
 
+---
+-- Helper to grow rectangles.
+function _M.growRectangle(r, s)
+	return {
+		w = r.w + s * 2,
+		h = r.h + s * 2,
+		x = r.x - s,
+		y = r.y - s
+	}
+end
+
 package.path = oldPath
 
 return _M

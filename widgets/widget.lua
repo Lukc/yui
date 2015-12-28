@@ -255,8 +255,8 @@ function _M:updateChildren(dt)
 		local child = self.children[i]
 
 		if child then
-			child.realX = child.x + self.realX
-			child.realY = child.y + self.realY
+			child.realX = child.x + self.realX + (self.padding or 0)
+			child.realY = child.y + self.realY + (self.padding or 0)
 
 			child:update(dt)
 		end
@@ -429,6 +429,8 @@ function _M:new(arg)
 
 	self.realHeight = self.height
 	self.realWidth = self.width
+
+	self.padding = arg.padding
 
 	self.id = arg.id
 

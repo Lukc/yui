@@ -36,6 +36,12 @@ function _M:update(dt)
 		child.realY = self.realY + child.y + height
 		child.realX = self.realX + offset
 
+		if i ~= 1 then
+			child.realY = child.realY + (self.spacing or 0) * (i - 1)
+		else
+			child.realY = child.realY + (self.padding or 0)
+		end
+
 		height = height + child.realHeight
 
 		child:update(dt)
@@ -71,6 +77,8 @@ function _M:new(arg)
 	Widget.new(self, arg)
 
 	self.align = arg.align
+
+	self.padding = arg.padding
 end
 
 return Object(_M, Widget)
