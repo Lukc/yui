@@ -66,10 +66,10 @@ end
 -- The dimensions and coordinates of that rectangle are those of the Widget.
 function _M:rectangle()
 	return {
-		x = self.realX,
-		y = self.realY,
-		w = self.realWidth,
-		h = self.realHeight
+		x = math.floor(self.realX),
+		y = math.floor(self.realY),
+		w = math.floor(self.realWidth),
+		h = math.floor(self.realHeight)
 	}
 end
 
@@ -229,6 +229,11 @@ function _M:drawTexture(renderer, texture)
 	if yOverflow > 0 then
 		source.h = source.h - yOverflow
 		destination.h = destination.h - yOverflow
+	end
+
+	for _, key in pairs {"x", "y", "w", "h"} do
+		source[key] = math.floor(source[key])
+		destination[key] = math.floor(destination[key])
 	end
 
 	renderer:copy(texture, source, destination)

@@ -14,7 +14,7 @@ local fonts = require "fonts"
 
 local _M = {}
 
-function _M:update()
+function _M:update(dt)
 	if self.updateNeeded then
 		local renderer = self:getRoot().renderer
 
@@ -28,7 +28,7 @@ function _M:update()
 		self.updateNeeded = false
 	end
 
-	Widget.update(self)
+	Widget.update(self, dt)
 
 	if self.align == "left" then
 		self.realX = self.parent.realX + self.x

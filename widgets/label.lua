@@ -12,8 +12,8 @@ local fonts = require "fonts"
 
 local _M = {}
 
-function _M:update()
-	Widget.update(self)
+function _M:update(dt)
+	Widget.update(self, dt)
 
 	if self.updateNeeded then
 		if self.text and self.text ~= "" then

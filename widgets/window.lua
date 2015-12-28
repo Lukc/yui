@@ -153,7 +153,7 @@ function _M:update(dt)
 
 	self:triggerEvent("update", dt)
 
-	Widget.updateChildren(self)
+	Widget.updateChildren(self, dt)
 end
 
 ---
