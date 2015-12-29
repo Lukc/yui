@@ -73,6 +73,29 @@ function _M:rectangle()
 	}
 end
 
+function _M:clipRectangle(oldClip)
+	local r = self:rectangle()
+
+	local rx2 = r.x + r.w
+	local ry2 = r.y + r.h
+
+	local ox2 = oldClip.x + oldClip.w
+	local oy2 = oldClip.y + oldClip.h
+
+	local nx = math.max(r.x, oldClip.x)
+	local ny = math.max(r.y, oldClip.y)
+
+	local nx2 = math.min(rx2, ox2)
+	local ny2 = math.min(ry2, oy2)
+
+	return {
+		x = nx,
+		y = ny,
+		w = nx2 - nx,
+		h = ny2 - ny,
+	}
+end
+
 ---
 -- Removes a child from an element.
 function _M:removeChild(child)
@@ -224,13 +247,17 @@ end
 --
 -- @see Widget:draw
 function _M:drawChildren(renderer)
+	local oldClipRect = renderer:getClipRect()
+
+	renderer:setClipRect(self:clipRectangle(oldClipRect))
+
 	for i = 1, #self.children do
 		local child = self.children[i]
 
-		if child then
-			child:draw(renderer)
-		end
+		child:draw(renderer)
 	end
+
+	renderer:setClipRect(oldClipRect)
 end
 
 ---
@@ -487,6 +514,8 @@ function _M:new(arg)
 	if not self.classes then
 		self.classes = {}
 	end
+
+	self.useCanvas = arg.useCanvas or false
 end
 
 return Object(_M)

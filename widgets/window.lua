@@ -16,6 +16,10 @@ local _M = {}
 -- Default window background color.
 _M.backgroundColor = 0x000000
 
+function _M:clipRectangle()
+	return self:rectangle()
+end
+
 ---
 -- @see Widget:draw
 function _M:draw(renderer)
