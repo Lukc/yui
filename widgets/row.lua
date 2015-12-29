@@ -48,6 +48,12 @@ function _M:update(dt)
 
 		child:update(dt)
 	end
+
+	if not self.width then
+		self.realWidth = width +
+		(self.padding or 0) * 2 +
+		(self.spacing or 0) * (#self.children - 1)
+	end
 end
 
 ---
