@@ -19,11 +19,25 @@ minor projects like yaoui or HTML.
 Usage
 =====
 
-Nope. Nope nope nope. We’re not done yet.
+```lua
+local yui = require "yui.init"
 
-But basically, you run `yui.init()`, you load a few fonts with
-`yui:loadFont()`, and then you create windows (with `ui.Window`),
-and then you `yui.run(aTableOfYourWindows)` until it doesn’t work anymore.
+yui.init()
 
-Clear instructions will come later.
+yui:loadFont("default", "DejaVuSans.ttf", 18)
+
+local w = yui.Window {
+	width = 800,
+	height = 600,
+
+	yui.Label "It works!"
+}
+
+while yui:run {w} do end
+```
+
+You can use other widgets, like `yui.Button`, `yui.Frame`, `yui.Column`,
+`yui.Row` and `yui.TextInput`. Each of them have particular properties. You
+can look at their (commented and documented) source files for more information.
+Or build the documentation with LDoc.
 
