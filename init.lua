@@ -7,6 +7,7 @@
 
 local sdl = require "SDL"
 local ttf = require "SDL.ttf"
+local image = require "SDL.image"
 
 local oldPath = package.path
 
@@ -21,7 +22,9 @@ local _M = {
 	Frame     = require "widgets.frame",
 	Label     = require "widgets.label",
 	Column    = require "widgets.column",
+	Row       = require "widgets.row",
 	TextInput = require "widgets.text_input",
+	Image     = require "widgets.image",
 
 	fonts = require "fonts",
 
@@ -44,6 +47,14 @@ function _M:init()
 	end
 
 	r, err = ttf.init()
+
+	if not r then
+		return nil, err
+	end
+
+	r, err = image.init {
+		image.flags.JPG, image.flags.PNG, image.flags.TIF
+	}
 
 	if not r then
 		return nil, err
@@ -160,6 +171,17 @@ function _M:run(elements)
 	end
 
 	return true
+end
+
+---
+-- Helper to grow rectangles.
+function _M.growRectangle(r, s)
+	return {
+		w = r.w + s * 2,
+		h = r.h + s * 2,
+		x = r.x - s,
+		y = r.y - s
+	}
 end
 
 package.path = oldPath

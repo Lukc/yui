@@ -16,9 +16,15 @@ local _M = {}
 -- Default window background color.
 _M.backgroundColor = 0x000000
 
+function _M:clipRectangle()
+	return self:rectangle()
+end
+
 ---
 -- @see Widget:draw
 function _M:draw(renderer)
+	self:themeDraw("Window", renderer)
+
 	Widget.draw(self, renderer)
 
 	self:triggerEvent("draw", renderer)
@@ -153,7 +159,7 @@ function _M:update(dt)
 
 	self:triggerEvent("update", dt)
 
-	Widget.updateChildren(self)
+	Widget.updateChildren(self, dt)
 end
 
 ---

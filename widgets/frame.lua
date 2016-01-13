@@ -30,16 +30,12 @@ function _M:draw(renderer)
 			renderer:setDrawColor(0x880088)
 		end
 
-		renderer:drawRect {
-			x = self.realX, y = self.realY,
-			w = self.realWidth, h = self.realHeight
-		}
-
+		renderer:drawRect(self:rectangle())
 		renderer:drawLine {
-			x1 = self.realX + 1,
-			y1 = self.realY + self.titleHeight,
-			x2 = self.realX + self.realWidth - 1,
-			y2 = self.realY + self.titleHeight
+			x1 = math.floor(self.realX + 1),
+			y1 = math.floor(self.realY + self.titleHeight),
+			x2 = math.floor(self.realX + self.realWidth - 1),
+			y2 = math.floor(self.realY + self.titleHeight)
 		}
 	end
 
@@ -51,7 +47,7 @@ end
 --
 -- @see Widget:update
 function _M:update(dt)
-	self:triggerEvent("update")
+	Widget.update(self, dt)
 
 	for i = 1, #self.children do
 		local child = self.children[i]
@@ -73,7 +69,7 @@ end
 function _M:new(arg)
 	Widget.new(self, arg)
 
-	self.titleHeight = arg.titleHeight or 30
+	self.titleHeight = arg.titleHeight or 0
 
 	self.clickable = true
 end

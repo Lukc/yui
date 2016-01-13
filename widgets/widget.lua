@@ -20,7 +20,7 @@ _M.x = 0
 --- Default requested widget y position.
 _M.y = 0
 
--- The real- variants are the values actually used by yurui. They’re calculated
+-- The real- variants are the values actually used by Yui. They’re calculated
 -- not only with the widget’s configuration, but with the parent’s as well.
 -- For example, realX will be the child offset (widget.x) plus the parent’s
 -- realX.
@@ -66,10 +66,33 @@ end
 -- The dimensions and coordinates of that rectangle are those of the Widget.
 function _M:rectangle()
 	return {
-		x = self.realX,
-		y = self.realY,
-		w = self.realWidth,
-		h = self.realHeight
+		x = math.floor(self.realX),
+		y = math.floor(self.realY),
+		w = math.floor(self.realWidth),
+		h = math.floor(self.realHeight)
+	}
+end
+
+function _M:clipRectangle(oldClip)
+	local r = self:rectangle()
+
+	local rx2 = r.x + r.w
+	local ry2 = r.y + r.h
+
+	local ox2 = oldClip.x + oldClip.w
+	local oy2 = oldClip.y + oldClip.h
+
+	local nx = math.max(r.x, oldClip.x)
+	local ny = math.max(r.y, oldClip.y)
+
+	local nx2 = math.min(rx2, ox2)
+	local ny2 = math.min(ry2, oy2)
+
+	return {
+		x = nx,
+		y = ny,
+		w = nx2 - nx,
+		h = ny2 - ny,
 	}
 end
 
@@ -115,6 +138,35 @@ function _M:getElementById(id)
 
 		if r then
 			return r
+		end
+	end
+end
+
+---
+--
+function _M:getElementsByClass(class, out)
+	if not out then
+		out = {}
+	end
+
+	if self:hasClass(class) then
+		out[#out+1] = self
+	end
+
+	for i = 1, #self.children do
+		local child = self.children[i]
+
+		child:getElementsByClass(class, out)
+	end
+
+	return out
+end
+
+
+function _M:hasClass(class)
+	for i = 1, #self.classes do
+		if self.classes[i] == class then
+			return true
 		end
 	end
 end
@@ -195,13 +247,52 @@ end
 --
 -- @see Widget:draw
 function _M:drawChildren(renderer)
+	local oldClipRect = renderer:getClipRect()
+
+	renderer:setClipRect(self:clipRectangle(oldClipRect))
+
 	for i = 1, #self.children do
 		local child = self.children[i]
 
-		if child then
-			child:draw(renderer)
-		end
+		child:draw(renderer)
 	end
+
+	renderer:setClipRect(oldClipRect)
+end
+
+---
+-- Helps in drawing texture without provoking overflows.
+function _M:drawTexture(renderer, texture)
+	local destination = self:rectangle()
+	local source = {
+		x = 0, y = 0,
+		w = destination.w, h = destination.h
+	}
+
+	local parent = self.parent
+
+	local xOverflow =
+	(self.realWidth + self.realX) -
+	(parent.realWidth + parent.realX)
+	if xOverflow > 0 then
+		source.w = source.w - xOverflow
+		destination.w = destination.w - xOverflow
+	end
+
+	local yOverflow =
+	(self.realHeight + self.realY) -
+	(parent.realHeight + parent.realY)
+	if yOverflow > 0 then
+		source.h = source.h - yOverflow
+		destination.h = destination.h - yOverflow
+	end
+
+	for _, key in pairs {"x", "y", "w", "h"} do
+		source[key] = math.floor(source[key])
+		destination[key] = math.floor(destination[key])
+	end
+
+	renderer:copy(texture, source, destination)
 end
 
 ---
@@ -225,8 +316,8 @@ function _M:updateChildren(dt)
 		local child = self.children[i]
 
 		if child then
-			child.realX = child.x + self.realX
-			child.realY = child.y + self.realY
+			child.realX = child.x + self.realX + (self.padding or 0)
+			child.realY = child.y + self.realY + (self.padding or 0)
 
 			child:update(dt)
 		end
@@ -239,6 +330,14 @@ end
 -- Also triggers an `update` event.
 function _M:update(dt)
 	self:triggerEvent("update", dt)
+
+	if self.width then
+		self.realWidth = self.width or self.realWidth
+	end
+
+	if self.height then
+		self.realHeight = self.height or self.realHeight
+	end
 
 	self:updateChildren(dt)
 end
@@ -392,6 +491,8 @@ function _M:new(arg)
 	self.realHeight = self.height
 	self.realWidth = self.width
 
+	self.padding = arg.padding
+
 	self.id = arg.id
 
 	self.focused = false
@@ -401,6 +502,20 @@ function _M:new(arg)
 	self.clickedElement = {}
 
 	self.theme = arg.theme
+
+	if arg.class then
+		self.classes = {arg.class}
+	end
+
+	if arg.classes then
+		self.classes = arg.classes
+	end
+
+	if not self.classes then
+		self.classes = {}
+	end
+
+	self.useCanvas = arg.useCanvas or false
 end
 
 return Object(_M)

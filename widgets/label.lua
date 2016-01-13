@@ -12,8 +12,8 @@ local fonts = require "fonts"
 
 local _M = {}
 
-function _M:update()
-	Widget.update(self)
+function _M:update(dt)
+	Widget.update(self, dt)
 
 	if self.updateNeeded then
 		if self.text and self.text ~= "" then
@@ -28,7 +28,7 @@ function _M:update()
 				self:themeData("defaultFont") or "default"
 
 			self.surface =
-				fonts[font]:renderUtf8(self.text, "solid", color)
+				fonts[font]:renderUtf8(self.text, "blended", color)
 
 			self.texture =
 				renderer:createTextureFromSurface(self.surface)
@@ -51,7 +51,8 @@ function _M:update()
 		self.realX = self.parent.realX + self.x +
 			(self.parent.realWidth - self.realWidth) / 2
 	elseif self.align == "right" then
-		self.realX = self.parent.realX + self.parent.realWidth - self.realWidth
+		self.realX = self.parent.realX + self.x +
+			self.parent.realWidth - self.realWidth
 	end
 
 	if self.vAlign == "top" then
@@ -59,8 +60,9 @@ function _M:update()
 	elseif self.vAlign == "middle" then
 		self.realY = self.parent.realY + self.y +
 			(self.parent.realHeight - self.realHeight) / 2
-	elseif self.align == "bottom" then
-		self.realY = self.parent.realY + self.parent.realHeight - self.realHeight
+	elseif self.vAlign == "bottom" then
+		self.realY = self.parent.realY + self.x +
+			self.parent.realHeight - self.realHeight
 	end
 end
 
@@ -73,21 +75,7 @@ function _M:draw(renderer)
 
 	local _, _, width, height = self.texture:query()
 
-	if self.texture then
-		renderer:copy(self.texture, nil, {
-			x = self.realX,
-			y = self.realY,
-			w = width,
-			h = height
-		})
-	end
-
-	renderer:drawRect {
-		x = self.realX,
-		y = self.realY,
-		w = self.realWidth,
-		h = self.realHeight
-	}
+	self:drawTexture(renderer, self.texture)
 end
 
 ---
