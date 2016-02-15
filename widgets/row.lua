@@ -21,6 +21,8 @@ local _M = {}
 --
 -- @todo Maybe… we should factorize this and Column:update?
 function _M:update(dt)
+	self:triggerEvent("update", dt)
+
 	local width = 0
 
 	for i = 1, #self.children do

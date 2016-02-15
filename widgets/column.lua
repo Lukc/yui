@@ -19,6 +19,8 @@ local _M = {}
 ---
 -- Column updating method.
 function _M:update(dt)
+	self:triggerEvent("update", dt)
+
 	local height = 0
 
 	for i = 1, #self.children do
