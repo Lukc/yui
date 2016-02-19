@@ -101,8 +101,8 @@ end
 function _M:removeChild(child)
 	local root = self:getRoot()
 	local found = false
-	for i = 1, #root.focused do
-		if root.focused[i] == child then
+	for i = 1, #root.focusedElements do
+		if root.focusedElements[i] == child then
 			found = true
 		end
 
