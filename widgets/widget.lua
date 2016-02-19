@@ -187,7 +187,7 @@ end
 -- Internal helper to handle mouse events.
 function _M:handleMouseButtonDown(event)
 	if self:within(event) then
-		for i = 1, #self.children do
+		for i = #self.children, 1, -1 do
 			local child = self.children[i]
 
 			if child:within(event) then
@@ -218,7 +218,7 @@ end
 -- Internal helper to handle mouse events.
 function _M:handleMouseButtonUp(event)
 	if self:within(event) then
-		for i = 1, #self.children do
+		for i = #self.children, 1, -1 do
 			local child = self.children[i]
 
 			if child:within(event) then
