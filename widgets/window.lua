@@ -86,16 +86,16 @@ function _M:handleEvent(event)
 		self:resetHover(x, y)
 
 		return true
-	elseif event.type == sdl.event.MouseButtonDown then
+	elseif event.type == sdl.event.MouseButtonDown or event.type == sdl.event.FingerDown then
 		self:handleMouseButtonDown(event)
 
 		return true
-	elseif event.type == sdl.event.MouseButtonUp then
+	elseif event.type == sdl.event.MouseButtonUp or event.type == sdl.event.FingerUp then
 		self:handleMouseButtonUp(event)
 
 		-- Not being clicked on anymore, uh.
-		self.clickedElement[event.button].clicked = false
-		self.clickedElement[event.button] = false
+		self.clickedElement[event.button or "finger"].clicked = false
+		self.clickedElement[event.button or "finger"] = false
 
 		return true
 	else

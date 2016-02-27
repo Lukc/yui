@@ -201,15 +201,15 @@ function _M:handleMouseButtonDown(event)
 
 		local root = self:getRoot()
 
-		root.clickedElement[event.button] = self
+		root.clickedElement[event.button or "finger"] = self
 		self.clicked = true
 
 		if self.clickable then
-			self:triggerEvent("mouseDown", event.button)
+			self:triggerEvent("mouseDown", event.button or "finger")
 
 			return true
 		else
-			return self:triggerEvent("mouseDown", event.button)
+			return self:triggerEvent("mouseDown", event.button or "finger")
 		end
 	end
 end
@@ -230,14 +230,14 @@ function _M:handleMouseButtonUp(event)
 			end
 		end
 
-		self:triggerEvent("mouseUp", event.button)
+		self:triggerEvent("mouseUp", event.button or "finger")
 
 		local root = self:getRoot()
 
-		if root.clickedElement[event.button] == self then
+		if root.clickedElement[event.button or "finger"] == self then
 			self:setFocus()
 
-			return self:triggerEvent("click", event.button)
+			return self:triggerEvent("click", event.button or "finger")
 		end
 	end
 end
